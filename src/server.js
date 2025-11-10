@@ -40,7 +40,6 @@ const server = () => {
         credentials: true,
     };
     app.use((0, cors_1.default)(corsOptions));
-    app.options('*', (0, cors_1.default)(corsOptions));
 
     // Middleware
     app.use(express_1.default.json());
