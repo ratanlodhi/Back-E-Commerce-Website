@@ -21,15 +21,26 @@ const server = () => {
     const PORT = process.env.PORT || 5000;
 
     // ✅ Allow CORS for your Vercel frontend and localhost for development
-    app.use((0, cors_1.default)({
-        origin: [
-            // "https://real-time-e-commerce-we-git-b87868-ratan-singh-project-39c878e1.vercel.app",
-            "https://real-time-e-commerce-website-develo.vercel.app",
-            "http://localhost:5173"
-        ],
+    const corsOptions = {
+        origin: function (origin, callback) {
+            const allowedOrigins = [
+                "https://real-time-e-commerce-website-develo.vercel.app",
+                "http://localhost:5173"
+            ];
+            // Allow requests with no origin (like mobile apps or curl requests)
+            if (!origin) return callback(null, true);
+            if (allowedOrigins.indexOf(origin) !== -1) {
+                return callback(null, true);
+            } else {
+                return callback(new Error('Not allowed by CORS'));
+            }
+        },
         methods: ["GET", "POST", "PUT", "DELETE"],
-        credentials: false,
-    }));
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true,
+    };
+    app.use((0, cors_1.default)(corsOptions));
+    app.options('*', (0, cors_1.default)(corsOptions));
 
     // Middleware
     app.use(express_1.default.json());
